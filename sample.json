@@ -3,6 +3,7 @@
 		"id": 1,
 		"type": "node",
 		"label": "Matt's node",
+		"subnet": "8.0.0.0/8",
 		"peering": [3, 2]
 	},
 	{
@@ -36,12 +37,14 @@
 		"id": 7,
 		"type": "node",
 		"label": "Ed's subnet",
+		"subnet": "9.0.0.0/8",
 		"peering": [4, 6]
 	},
 	{
 		"id": 8,
 		"type": "node",
 		"label": "Netflix",
+		"subnet": "10.0.0.0/8",
 		"peering": [9]
 	},
 	{
