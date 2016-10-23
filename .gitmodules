@@ -1,0 +1,3 @@
+[submodule "go-sflow"]
+	path = go-sflow
+	url = git@github.com:bigmstone/go-sflow.git
