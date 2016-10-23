@@ -4,6 +4,7 @@
 Vagrant.configure("2") do |config|
   config.vm.define "mgmt_server" do |server|
     server.vm.box = "ubuntu/trusty64"
+    server.vm.network "public_network"
     server.vm.network "private_network", virtualbox__intnet: "mgmt", ip: "192.168.50.10"
     server.vm.provision "shell", inline: <<-SHELL
     SHELL
