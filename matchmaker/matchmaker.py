@@ -8,18 +8,20 @@ if __name__ == '__main__':
     peer_map = PeerMap("sample.json")
 
     pairs = [
-        ["Matt's node", "Ed's subnet"],
-        ["Matt's node", "Netflix"]
+        [sys.argv[1], sys.argv[2]]
+        # ["8.0.0.1", "9.0.0.1"],
+        # ["8.0.0.1", "10.0.0.1"]
     ]
 
     for pair in pairs:
-        possible_peering = peer_map.common_ixps(*pair)
+        nodes = [peer_map.find_subnet(pair[0]), peer_map.find_subnet(pair[1])]
+        possible_peering = peer_map.common_ixps(*nodes)
         if possible_peering:
-            print "%s could connect to %s through %s." % (
-                pair[0], pair[1],
+            print "%s (%s) could connect to %s (%s) through %s." % (
+                nodes[0]['label'], pair[0], nodes[1]['label'], pair[1],
                 ", ".join([ixp['label'] for ixp in possible_peering])
             )
         else:
-            print "There is no IXP that could connect %s to %s." % (
-                pair[0], pair[1]
+            print "There is no IXP that could connect %s (%s) to %s (%s)." % (
+                nodes[0]['label'], pair[0], nodes[1]['label'], pair[1]
             )

@@ -2,6 +2,8 @@
 
 import json
 
+from netaddr import IPNetwork, IPAddress
+
 
 class PeerMap:
     def __init__(self, path):
@@ -12,27 +14,30 @@ class PeerMap:
         self.map = None
         self._lookup_table_id = {}
         self._lookup_table_label = {}
+        self._lookup_table_subnet = {}
         with open(self.path, 'r') as map_file:
             self.map = json.load(map_file)
         for node in self.map:
             self._lookup_table_id[node['id']] = node
             self._lookup_table_label[node['label']] = node
-
-    def _lookup_by_label(self, node_label):
-        return self._lookup_table_label.get(node_label)
-
-    def _lookup_by_id(self, node_id):
-        return self._lookup_table_id.get(node_id)
+            if 'subnet' in node:
+                self._lookup_table_subnet[node['subnet']] = node
 
     def lookup(self, node):
-        if type(node) is int or node.isdigit():
-            return self._lookup_by_id(int(node))
+        if type(node) is int or type(node) is str and node.isdigit():
+            return self._lookup_table_id.get(node)
         elif type(node) is str:
-            return self._lookup_by_label(node)
+            return self._lookup_table_label.get(node)
         elif node in self.map:
             return node
         else:
             return None
+
+    def find_subnet(self, ip_address):
+        for subnet, node in self._lookup_table_subnet.items():
+            if IPAddress(ip_address) in IPNetwork(subnet):
+                return node
+        return None
 
     def find_peers(self, node, peer_type, depth):
         node = self.lookup(node)
